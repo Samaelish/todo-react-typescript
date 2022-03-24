@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, useState } from "react";
+import React, { FC, ChangeEvent, useState, useRef } from "react";
 import "./App.css";
 import TodoTask from "./Components/TodoTask";
 import { ITask } from "./Interfaces";
@@ -7,6 +7,7 @@ const App: FC = () => {
     const [task, setTask] = useState<string>("");
     const [deadline, setDealine] = useState<number>(0);
     const [todoList, setTodoList] = useState<ITask[]>([]);
+    const inputRef = useRef<HTMLInputElement>(null)
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
         if (event.target.name === "task") {
@@ -21,6 +22,9 @@ const App: FC = () => {
         setTodoList([...todoList, newTask]);
         setTask("");
         setDealine(0);
+        if (inputRef.current !== null) {
+            inputRef.current.focus()
+        }
     };
 
     const completeTask = (taskNameToDelete: string): void => {
@@ -36,6 +40,7 @@ const App: FC = () => {
             <div className="header">
                 <div className="inputContainer">
                     <input
+                        ref={inputRef}
                         type="text"
                         placeholder="Task..."
                         name="task"
